@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Enums ─────────────────────────────────────────────────────────────────
+
+enum Level {
+  L3
+  L4
+  L5
+  L6
+  SDE_I
+  SDE_II
+  SDE_III
+  STAFF
+  PRINCIPAL
+  IC4
+  IC5
+}
+
+enum Currency {
+  INR
+  USD
+  GBP
+  EUR
+}
+
+enum Source {
+  CONTRIBUTOR
+  SCRAPED
+  AI_INFERRED
+}
+
+// ─── Models ────────────────────────────────────────────────────────────────
+
+model Company {
+  id              String   @id @default(uuid())
+  name            String   // Display name: "Google India"
+  slug            String   @unique // URL-safe: "google"
+  normalized_name String   // Lowercase canonical: "google"
+  industry        String?
+  headquarters    String?
+  founded_year    Int?
+  headcount_range String?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  salaries Salary[]
+
+  @@index([normalized_name])
+}
+
+model Salary {
+  id                 String   @id @default(uuid())
+  company_id         String
+  role               String
+  level              Level
+  location           String
+  currency           Currency
+  experience_years   Int
+  base_salary        BigInt
+  bonus              BigInt   @default(0)
+  stock              BigInt   @default(0)
+  total_compensation BigInt
+  source             Source
+  confidence_score   Decimal  @db.Decimal(3, 2)
+  is_verified        Boolean  @default(false)
+  submitted_at       DateTime @default(now())
+  updated_at         DateTime @updatedAt
+
+  company Company @relation(fields: [company_id], references: [id])
+
+  @@index([company_id, level, location])
+  @@index([total_compensation])
+  @@index([submitted_at])
+  @@index([location, level])
+}
