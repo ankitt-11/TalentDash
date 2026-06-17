@@ -1,8 +1,7 @@
 # TalentDash — Full-Stack Engineer Trial
 
 India's compensation intelligence platform. Real salary data, comparable, decision-ready.
-
-**Live URL**: https://talentdash.vercel.app  
+ 
 **Tech Stack**: Next.js 15 · TypeScript · Tailwind CSS · Prisma · PostgreSQL (Neon) · Vercel
 
 ---
