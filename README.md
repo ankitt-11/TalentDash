@@ -1,6 +1,9 @@
 # TalentDash — Full-Stack Engineer Trial
 
 India's compensation intelligence platform. Real salary data, comparable, decision-ready.
+
+**Live Demo**: [https://talent-dash-blue.vercel.app/](https://talent-dash-blue.vercel.app/)  
+**GitHub Repository**: [https://github.com/ankitt-11/TalentDash](https://github.com/ankitt-11/TalentDash)
  
 **Tech Stack**: Next.js 15 · TypeScript · Tailwind CSS · Prisma · PostgreSQL (Neon) · Vercel
 
@@ -266,10 +269,13 @@ Page-based chosen because:
 - **AI normalisation pipeline**: That's the AI/Data role; seed data covers Full-Stack needs
 - **TypeSense search**: PostgreSQL ILIKE is sufficient at seed data scale
 
-## Known Limitations
+## Known Limitations & Assumptions
 
-To deliver a complete vertical slice within the 72-hour trial limit, the following conscious engineering tradeoffs were made:
+To deliver a complete vertical slice within the 72-hour trial limit, the following conscious engineering tradeoffs and assumptions were made:
 
+* **Company Deduplication Assumption**: We assume users might slightly misspell or format company names differently (e.g., "Google India" vs "google"). The normalisation logic handles common suffixes to group these automatically under one entity.
+* **Currency Base Assumption**: The application focuses primarily on the Indian Tech market, assuming INR as the default reporting currency unless specified otherwise.
+* **Compensation Components**: We assume Total Compensation equals Base + Bonus + Stock. Any other allowances (joining bonus, relocation) are either absorbed into these fields or excluded to keep data clean and comparable.
 * **Static Currency Conversion Rates**: Currency conversion (`INR` to `USD`) relies on hardcoded constants. Acceptable for the trial scope, but a production system would require a cron job fetching live forex APIs.
 * **Compare Selector Scalability**: The drop-down selector on the compare page fetches the top 100 records. For millions of rows, this must be replaced with an async autocomplete endpoint utilizing debounce.
 * **ILIKE Search vs. Full-Text Search**: We use PostgreSQL `ILIKE` for company/role searches. While sufficient for seed data, production would migrate to `tsvector` or TypeSense for typo-tolerance.

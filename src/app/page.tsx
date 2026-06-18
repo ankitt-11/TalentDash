@@ -25,20 +25,19 @@ const FEATURED_COMPANIES = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen">
       {/* Hero */}
       <section className="bg-white border-b border-brand-border py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-brand-data-light text-brand-data px-4 py-1.5 rounded-full text-label font-medium mb-6">
-            🇮🇳 India&apos;s #1 Compensation Intelligence Platform
+            Compensation Intelligence for Tech Professionals
           </div>
           <h1 className="text-[48px] sm:text-[60px] font-bold text-brand-black leading-[1.05] mb-6">
-            Know your worth.{" "}
-            <span className="text-gradient-primary">Negotiate better.</span>
+            Explore and Compare{" "}
+            <span className="text-gradient-primary">Real Compensation Data.</span>
           </h1>
           <p className="text-body text-brand-muted max-w-xl mx-auto mb-10 text-lg">
-            Real salary data from verified employees at Google, Amazon, Flipkart, and
-            1000+ companies. Filter by level, city, and role. <br/><span className="text-meta text-brand-muted font-medium">Updated from verified salary submissions.</span>
+            Make data-driven career decisions. Filter by company, role, level, and city. Compare offers side-by-side with exact deltas. <br/><span className="text-meta text-brand-muted font-medium">Updated from verified salary submissions.</span>
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/salaries" prefetch={true} id="hero-cta-salaries" className="btn-primary text-base px-8 py-3">
@@ -118,6 +117,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   )
 }

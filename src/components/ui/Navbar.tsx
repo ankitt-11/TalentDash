@@ -12,7 +12,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-2 group" aria-label="TalentDash Home">
             <span className="text-h3 font-bold text-brand-primary group-hover:opacity-90 transition-opacity">
               Talent
             </span>
