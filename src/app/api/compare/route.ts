@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
     }
 
     // ── Serialise ───────────────────────────────────────────────────────
-    function serialise(r: typeof record1) {
+    function serialise(r: NonNullable<typeof record1>) {
       return {
         id: r.id,
         company: r.company,

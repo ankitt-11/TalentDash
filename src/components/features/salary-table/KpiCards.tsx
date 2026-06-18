@@ -1,9 +1,9 @@
 import { formatSalary } from "@/lib/format"
 import { computeMedian } from "@/lib/salary"
-import { SerialisedSalary } from "@/types/salary"
+import { SalaryRecord } from "@/types/salary"
 
 interface KpiCardsProps {
-  salaries: SerialisedSalary[]
+  salaries: SalaryRecord[]
   totalRecords: number
   displayCurrency: "INR" | "USD"
 }

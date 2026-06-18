@@ -40,7 +40,7 @@ export default function SalaryFilters() {
   const levelDropdownRef = useRef<HTMLDivElement>(null)
 
   // Debounce timer ref
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>()
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const buildParams = useCallback(
     (overrides: Record<string, string | string[] | undefined> = {}) => {
@@ -64,7 +64,9 @@ export default function SalaryFilters() {
 
   // Debounced URL push for text inputs
   function debounceNavigate(newParams: string) {
-    clearTimeout(debounceRef.current)
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current)
+    }
     debounceRef.current = setTimeout(() => {
       router.push(`${pathname}?${newParams}`)
     }, 300)

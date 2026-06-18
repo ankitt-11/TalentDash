@@ -21,7 +21,7 @@ export default function SalaryRow({ salary, displayCurrency }: SalaryRowProps) {
   return (
     <tr className="group even:bg-gray-50/50 hover:bg-brand-hover transition-colors">
       {/* Company */}
-      <td className="px-4 py-4 border-b border-brand-border">
+      <td className="px-4 py-3 border-b border-brand-border">
         <div className="flex items-center gap-3">
           {/* Initials Avatar */}
           <div className="w-8 h-8 rounded-md bg-gray-100 border border-gray-200 flex items-center justify-center shrink-0 text-xs font-bold text-gray-600">
@@ -30,6 +30,7 @@ export default function SalaryRow({ salary, displayCurrency }: SalaryRowProps) {
           <div>
             <Link
               href={`/companies/${salary.company.slug}`}
+              prefetch={true}
               className="font-semibold text-brand-black hover:text-brand-primary transition-colors max-w-[160px] block truncate"
               title={salary.company.name}
             >
@@ -45,45 +46,45 @@ export default function SalaryRow({ salary, displayCurrency }: SalaryRowProps) {
       </td>
 
       {/* Role */}
-      <td className="px-4 py-4 border-b border-brand-border">
+      <td className="px-4 py-3 border-b border-brand-border">
         <span className="text-body font-medium text-brand-dark max-w-[180px] block truncate" title={salary.role}>
           {salary.role}
         </span>
       </td>
 
       {/* Level */}
-      <td className="px-4 py-4 border-b border-brand-border">
+      <td className="px-4 py-3 border-b border-brand-border">
         <LevelBadge level={salary.level} />
       </td>
 
       {/* Location */}
-      <td className="px-4 py-4 border-b border-brand-border">
+      <td className="px-4 py-3 border-b border-brand-border">
         <span className="text-body text-brand-dark whitespace-nowrap">{salary.location}</span>
       </td>
 
       {/* Experience */}
-      <td className="px-4 py-4 border-b border-brand-border">
+      <td className="px-4 py-3 border-b border-brand-border">
         <span className="text-body text-brand-dark whitespace-nowrap">
           {formatExperience(salary.experience_years)}
         </span>
       </td>
 
       {/* Base Salary */}
-      <td className="px-4 py-4 border-b border-brand-border">
+      <td className="px-4 py-3 border-b border-brand-border text-right">
         <span className="text-body font-medium text-brand-dark whitespace-nowrap">
           {formatSalary(baseSalary, currency, displayCurr)}
         </span>
       </td>
 
       {/* Stock */}
-      <td className="px-4 py-4 border-b border-brand-border">
+      <td className="px-4 py-3 border-b border-brand-border text-right">
         <span className="text-body text-brand-dark whitespace-nowrap">
           {stock > 0n ? formatSalary(stock, currency, displayCurr) : "—"}
         </span>
       </td>
 
       {/* Total Comp — dominant number */}
-      <td className="px-4 py-4 border-b border-brand-border">
+      <td className="px-4 py-3 border-b border-brand-border text-right">
         <span className="tc-amount whitespace-nowrap">
           {formatSalary(tc, currency, displayCurr)}
         </span>

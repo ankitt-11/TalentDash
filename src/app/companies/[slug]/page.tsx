@@ -8,6 +8,25 @@ import { buildCompanyMeta, buildOrganizationJsonLd } from "@/lib/seo"
 import LevelDistributionBar from "@/components/features/company/LevelDistributionBar"
 import LevelBadge from "@/components/ui/LevelBadge"
 import { Level } from "@prisma/client"
+import { cache } from "react"
+
+// ── Memoized server-side helper for stats ─────────────────────────────────
+// Prevents redundant re-computation if called multiple times in a request tree
+const getCompanyStats = cache(async (companyId: string) => {
+  const data = await prisma.salary.findMany({
+    where: { company_id: companyId },
+    select: { total_compensation: true, level: true, currency: true },
+    orderBy: { total_compensation: "desc" },
+  })
+  
+  const tcValues = data.map((s) => s.total_compensation)
+  const medianTC = computeMedian(tcValues)
+  const minTC = tcValues.length > 0 ? tcValues[tcValues.length - 1] : 0n
+  const maxTC = tcValues.length > 0 ? tcValues[0] : 0n
+  const levelDist = getLevelDistribution(data)
+  
+  return { data, medianTC, minTC, maxTC, levelDist, total: data.length }
+})
 
 interface CompanyPageProps {
   params: Promise<{ slug: string }>
@@ -37,6 +56,9 @@ export async function generateMetadata({ params }: CompanyPageProps): Promise<Me
   }
 }
 
+
+
+
 export default async function CompanyPage({ params }: CompanyPageProps) {
   const { slug } = await params
 
@@ -47,22 +69,13 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
 
   if (!company) notFound()
 
-  // ── Fetch salaries sorted by TC desc ────────────────────────────────────
-  const salaries = await prisma.salary.findMany({
-    where: { company_id: company.id },
-    orderBy: { total_compensation: "desc" },
-  })
-
-  // ── Compute statistics ───────────────────────────────────────────────────
-  const tcValues = salaries.map((s) => s.total_compensation)
-  const medianTC = computeMedian(tcValues)
-  const minTC = tcValues.length > 0 ? tcValues[tcValues.length - 1] : 0n
-  const maxTC = tcValues.length > 0 ? tcValues[0] : 0n
-  const levelDist = getLevelDistribution(salaries)
+  // ── Compute statistics via Server-Side Helper ────────────────────────────
+  const stats = await getCompanyStats(company.id)
+  const { medianTC, minTC, maxTC, levelDist, total, data: allStatsData } = stats
 
   // Determine primary currency (most common in this company's records)
   const currencyCount: Record<string, number> = {}
-  for (const s of salaries) {
+  for (const s of allStatsData) {
     currencyCount[s.currency] = (currencyCount[s.currency] ?? 0) + 1
   }
   const primaryCurrency =
@@ -71,6 +84,15 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
       | "USD"
       | "GBP"
       | "EUR") ?? "INR"
+
+  // ── Fetch recent salaries for the table (capped to prevent HTML bloat) ───
+  const salaries = await prisma.salary.findMany({
+    where: { company_id: company.id },
+    orderBy: { total_compensation: "desc" },
+    take: 100, // Capped to prevent massive DOM nodes on large companies
+  })
+
+
 
   const jsonLd = buildOrganizationJsonLd(company)
 
@@ -105,6 +127,9 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
               
               <div>
                 <h1 className="text-h1 text-brand-black mb-2">{company.name}</h1>
+                <div className="text-meta text-brand-muted mb-3">
+                  Based on {total} compensation records · Data refreshed regularly
+                </div>
                 <div className="flex flex-wrap items-center gap-3">
                   {company.industry && (
                     <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-brand-data-light text-brand-data text-label font-medium border border-blue-100">
@@ -186,7 +211,7 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
               <h2 className="text-h3 text-brand-black mb-4">Level Distribution</h2>
               <LevelDistributionBar
                 distribution={levelDist}
-                total={salaries.length}
+                total={total}
               />
             </div>
 
@@ -195,7 +220,7 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
               <h2 className="text-h3 text-brand-black mb-4">
                 All {company.name} Salaries
                 <span className="ml-2 text-label text-brand-muted font-normal">
-                  ({salaries.length} records · sorted by Total Comp)
+                  ({total} records · top {salaries.length} shown)
                 </span>
               </h2>
 
@@ -203,14 +228,14 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
                 <table className="salary-table" aria-label={`${company.name} salary records`}>
                   <thead>
                     <tr>
-                      <th>Role</th>
-                      <th>Level</th>
-                      <th>Location</th>
-                      <th>Experience</th>
-                      <th>Base Salary</th>
-                      <th>Bonus</th>
-                      <th>Stock</th>
-                      <th>Total Comp</th>
+                      <th className="text-left">Role</th>
+                      <th className="text-left">Level</th>
+                      <th className="text-left">Location</th>
+                      <th className="text-left">Experience</th>
+                      <th className="text-right">Base Salary</th>
+                      <th className="text-right">Bonus</th>
+                      <th className="text-right">Stock</th>
+                      <th className="text-right">Total Comp</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -218,28 +243,28 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
                       const currency = s.currency as "INR" | "USD" | "GBP" | "EUR"
                       return (
                         <tr key={s.id} className="group even:bg-gray-50/50 hover:bg-brand-hover transition-colors">
-                          <td className="px-4 py-4 border-b border-brand-border max-w-[200px]">
+                          <td className="px-4 py-3 border-b border-brand-border max-w-[200px]">
                             <span className="truncate block font-medium text-brand-dark" title={s.role}>{s.role}</span>
                           </td>
-                          <td className="px-4 py-4 border-b border-brand-border">
+                          <td className="px-4 py-3 border-b border-brand-border">
                             <LevelBadge level={s.level as Level} />
                           </td>
-                          <td className="px-4 py-4 border-b border-brand-border whitespace-nowrap">
+                          <td className="px-4 py-3 border-b border-brand-border whitespace-nowrap">
                             {s.location}
                           </td>
-                          <td className="px-4 py-4 border-b border-brand-border whitespace-nowrap">
+                          <td className="px-4 py-3 border-b border-brand-border whitespace-nowrap">
                             {s.experience_years} yr{s.experience_years !== 1 ? "s" : ""}
                           </td>
-                          <td className="px-4 py-4 border-b border-brand-border whitespace-nowrap">
+                          <td className="px-4 py-3 border-b border-brand-border whitespace-nowrap text-right">
                             {formatSalary(s.base_salary, currency)}
                           </td>
-                          <td className="px-4 py-4 border-b border-brand-border whitespace-nowrap">
+                          <td className="px-4 py-3 border-b border-brand-border whitespace-nowrap text-right">
                             {s.bonus > 0n ? formatSalary(s.bonus, currency) : "—"}
                           </td>
-                          <td className="px-4 py-4 border-b border-brand-border whitespace-nowrap">
+                          <td className="px-4 py-3 border-b border-brand-border whitespace-nowrap text-right">
                             {s.stock > 0n ? formatSalary(s.stock, currency) : "—"}
                           </td>
-                          <td className="px-4 py-4 border-b border-brand-border whitespace-nowrap">
+                          <td className="px-4 py-3 border-b border-brand-border whitespace-nowrap text-right">
                             <span className="tc-amount">
                               {formatSalary(s.total_compensation, currency)}
                             </span>

@@ -30,23 +30,17 @@ interface SalaryPageProps {
   }>
 }
 
+import { getSalaries } from "@/lib/salary"
+
 async function fetchSalaries(params: Awaited<SalaryPageProps["searchParams"]>) {
-  const queryString = new URLSearchParams()
-  if (params.company) queryString.set("company", params.company)
-  if (params.role) queryString.set("role", params.role)
-  if (params.level) queryString.set("level", params.level)
-  if (params.location) queryString.set("location", params.location)
-  if (params.currency) queryString.set("currency", params.currency)
-  if (params.sort) queryString.set("sort", params.sort)
-  if (params.page) queryString.set("page", params.page)
-
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
-  const res = await fetch(`${baseUrl}/api/salaries?${queryString.toString()}`, {
-    next: { revalidate: 300 },
-  })
-
-  if (!res.ok) throw new Error("Failed to fetch salaries")
-  return res.json() as Promise<SalaryListResponse>
+  // Directly query the database via the helper, avoiding the HTTP hop.
+  // Note: Since this is an RSC, Next.js can still cache the output if `dynamic` is omitted,
+  // but since we are reading searchParams, it opts into dynamic rendering.
+  return getSalaries({
+    ...params,
+    page: params.page ? parseInt(params.page, 10) : undefined,
+    limit: params.limit ? parseInt(params.limit, 10) : undefined,
+  }) as unknown as Promise<SalaryListResponse>
 }
 
 import KpiCards from "@/components/features/salary-table/KpiCards"
@@ -84,6 +78,9 @@ export default async function SalaryPage({ searchParams }: SalaryPageProps) {
             </h1>
             <p className="text-body text-brand-muted">
               Benchmark tech salaries across verified industry reports.
+            </p>
+            <p className="text-meta text-brand-muted mt-1">
+              Updated from verified salary submissions.
             </p>
           </div>
         </div>

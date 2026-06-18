@@ -38,13 +38,13 @@ export default function HomePage() {
           </h1>
           <p className="text-body text-brand-muted max-w-xl mx-auto mb-10 text-lg">
             Real salary data from verified employees at Google, Amazon, Flipkart, and
-            1000+ companies. Filter by level, city, and role. Free. Always.
+            1000+ companies. Filter by level, city, and role. <br/><span className="text-meta text-brand-muted font-medium">Updated from verified salary submissions.</span>
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/salaries" id="hero-cta-salaries" className="btn-primary text-base px-8 py-3">
+            <Link href="/salaries" prefetch={true} id="hero-cta-salaries" className="btn-primary text-base px-8 py-3">
               Browse Salaries →
             </Link>
-            <Link href="/compare" id="hero-cta-compare" className="btn-secondary text-base px-8 py-3">
+            <Link href="/compare" prefetch={true} id="hero-cta-compare" className="btn-secondary text-base px-8 py-3">
               Compare Offers
             </Link>
           </div>
@@ -83,6 +83,7 @@ export default function HomePage() {
               <Link
                 key={company.slug}
                 href={`/companies/${company.slug}`}
+                prefetch={true}
                 id={`company-card-${company.slug}`}
                 className="card hover:shadow-card-hover hover:border-brand-primary/30 transition-all duration-200 group text-center"
               >

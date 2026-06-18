@@ -10,19 +10,19 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          primary: "#2563EB",
-          black: "#111827",      // Text Primary
-          dark: "#374151",       // Intermediate Gray
-          muted: "#6B7280",      // Text Secondary
-          border: "#E5E7EB",     // Subtle Borders
-          hover: "#F3F4F6",      // Hover State
-          bg: "#FAFAFA",         // Global Background
+          primary: "#FF5A5F",
+          black: "#222222",      // Deep Text
+          dark: "#484848",       // Body Text
+          muted: "#717171",      // Muted Text
+          border: "#EBEBEB",     // Borders
+          hover: "#F2F2F2",      // Hover Surface
+          bg: "#F7F7F7",         // App Background
           surface: "#FFFFFF",    // Cards
-          success: "#16A34A",
-          warning: "#F59E0B",
-          error: "#DC2626",
-          data: "#2563EB",       // Keep aligned with primary
-          "data-light": "#EFF6FF", // Light primary background
+          success: "#008A05",
+          warning: "#FFB400",
+          error: "#D93025",
+          data: "#484848",       // Adjusted to fit the mature theme
+          "data-light": "#F2F2F2", // Muted light bg
         },
       },
       fontFamily: {
@@ -40,8 +40,8 @@ const config: Config = {
       },
       boxShadow: {
         card: "0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)",
-        "card-hover": "0 4px 12px rgba(0,0,0,0.10)",
-        "input-focus": "0 0 0 3px rgba(255,90,95,0.15)",
+        "card-hover": "0 2px 6px rgba(0,0,0,0.08)", // Subtle, less dramatic
+        "input-focus": "0 0 0 3px rgba(255,90,95,0.15)", // Uses the coral primary
       },
       borderRadius: {
         DEFAULT: "8px",

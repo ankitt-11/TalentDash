@@ -4,18 +4,18 @@
 @tailwind utilities;
 
 :root {
-  --brand-primary: #2563EB;
-  --brand-black: #111827;
-  --brand-dark: #374151;
-  --brand-muted: #6B7280;
-  --brand-border: #E5E7EB;
-  --brand-hover: #F3F4F6;
-  --brand-bg: #FAFAFA;
+  --brand-primary: #FF5A5F;
+  --brand-black: #222222;
+  --brand-dark: #484848;
+  --brand-muted: #717171;
+  --brand-border: #EBEBEB;
+  --brand-hover: #F2F2F2;
+  --brand-bg: #F7F7F7;
   --brand-surface: #FFFFFF;
-  --brand-success: #16A34A;
-  --brand-warning: #F59E0B;
-  --brand-error: #DC2626;
-  --brand-data: #2563EB;
+  --brand-success: #008A05;
+  --brand-warning: #FFB400;
+  --brand-error: #D93025;
+  --brand-data: #484848;
 }
 
 @layer base {
@@ -33,7 +33,7 @@
 
   body {
     min-height: 100vh;
-    background-color: #f7f7f7;
+    background-color: var(--brand-bg);
   }
 
   h1 {
@@ -69,7 +69,7 @@
   }
 
   .salary-table th {
-    @apply px-4 py-3 text-left text-label font-semibold text-brand-muted uppercase tracking-wide whitespace-nowrap;
+    @apply px-4 py-3 text-label font-semibold text-brand-muted uppercase tracking-wide whitespace-nowrap;
   }
 
   .salary-table th.sortable {
@@ -77,11 +77,11 @@
   }
 
   .salary-table td {
-    @apply px-4 py-4 text-body text-brand-dark border-b border-brand-border;
+    @apply px-4 py-3 text-body text-brand-dark border-b border-brand-border;
   }
 
   .salary-table tbody tr {
-    @apply transition-colors hover:bg-brand-hover;
+    @apply transition-colors hover:bg-[#F2F2F2];
   }
 
   .salary-table tbody tr:last-child td {
@@ -146,7 +146,7 @@
   /* ─── Buttons ──────────────────────────────────────────────── */
   .btn-primary {
     @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand-primary text-white
-           text-label font-semibold hover:bg-blue-700 active:bg-blue-800 shadow-sm
+           text-label font-semibold hover:opacity-90 active:scale-[0.98] shadow-sm
            transition-all duration-150 cursor-pointer;
   }
 
@@ -178,7 +178,7 @@
   }
 
   .pagination-btn.active {
-    @apply bg-brand-primary text-white border-brand-primary hover:bg-blue-700;
+    @apply bg-brand-black text-white border-brand-black;
   }
 
   /* ─── Currency Toggle ──────────────────────────────────────── */
@@ -224,7 +224,7 @@
   }
 
   .text-gradient-primary {
-    background: linear-gradient(135deg, #2563EB, #60A5FA);
+    background: linear-gradient(135deg, #FF5A5F, #FF7E82);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

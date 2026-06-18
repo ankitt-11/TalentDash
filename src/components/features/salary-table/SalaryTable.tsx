@@ -66,14 +66,14 @@ export default function SalaryTable({
   const end = Math.min(page * limit, total)
 
   const columns = [
-    { label: "Company", sortable: false },
-    { label: "Role", sortable: false },
-    { label: "Level", sortable: false },
-    { label: "Location", sortable: false },
-    { label: "Experience", sortable: false },
-    { label: "Base Salary", sortable: false },
-    { label: "Stock", sortable: false },
-    { label: "Total Comp", sortable: true },
+    { label: "Company", sortable: false, align: "left" },
+    { label: "Role", sortable: false, align: "left" },
+    { label: "Level", sortable: false, align: "left" },
+    { label: "Location", sortable: false, align: "left" },
+    { label: "Experience", sortable: false, align: "left" },
+    { label: "Base Salary", sortable: false, align: "right" },
+    { label: "Stock", sortable: false, align: "right" },
+    { label: "Total Comp", sortable: true, align: "right" },
   ]
 
   return (
@@ -119,7 +119,7 @@ export default function SalaryTable({
                   {columns.map((col) => (
                     <th
                       key={col.label}
-                      className={col.sortable ? "sortable" : ""}
+                      className={`${col.sortable ? "sortable" : ""} ${col.align === "right" ? "text-right" : "text-left"}`}
                       onClick={
                         col.sortable
                           ? () => handleSort(SORT_COLUMNS[0])
@@ -135,7 +135,7 @@ export default function SalaryTable({
                           : undefined
                       }
                     >
-                      <span className="flex items-center gap-1">
+                      <span className={`flex items-center gap-1 ${col.align === "right" ? "justify-end" : ""}`}>
                         {col.label}
                         {col.label === "Total Comp" && (
                           <svg
