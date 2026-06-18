@@ -57,16 +57,16 @@ India's compensation intelligence platform. Real salary data, comparable, decisi
 
 ### Salary Dashboard
 ![Salary Dashboard](./docs/salary-dashboard.png)
-
+<img width="1477" height="851" alt="Screenshot 2026-06-18 174320" src="https://github.com/user-attachments/assets/0b20ca8f-5f43-4809-b4ff-6db7cd971853" />
 ### Company Profile
 ![Company Profile](./docs/company-profile.png)
-
+<img width="1547" height="870" alt="Screenshot 2026-06-18 174410" src="https://github.com/user-attachments/assets/4ec5090f-b066-495a-bfba-923d9f726adc" />
 ### Compare Tool
 ![Compare Tool](./docs/compare-tool.png)
-
+<img width="1537" height="873" alt="Screenshot 2026-06-18 174528" src="https://github.com/user-attachments/assets/54462157-ddab-4217-b81e-93c0a6fe8b41" />
 ### Submit Salary Form
 ![Submit Salary Form](./docs/submit-salary.png)
-
+<img width="1563" height="867" alt="Screenshot 2026-06-18 174244" src="https://github.com/user-attachments/assets/2df2c00f-cb58-46a8-9a76-24ac7e303994" />
 ---
 
 ## Quick Start (Under 5 Minutes)
